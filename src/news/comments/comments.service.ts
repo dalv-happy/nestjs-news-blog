@@ -7,6 +7,12 @@ export type Comment = {
   author: string;
 };
 
+export type CommentEdit = {
+  id?: number;
+  message?: string;
+  author?: string;
+};
+
 @Injectable()
 export class CommentsService {
   private readonly comments = {};
@@ -17,6 +23,20 @@ export class CommentsService {
     }
 
     this.comments[idNews].push({ ...comment, id: getRandomInt() });
+    return 'Комментарий был создан';
+  }
+
+  edit(idNews: number, idComment: number, comment: CommentEdit) {
+    const indexComment =
+      this.comments[idNews]?.findIndex((c) => c.id === idComment) === -1;
+    if (!this.comments[idNews] || indexComment) {
+      return false;
+    }
+
+    this.comments[idNews][indexComment] = {
+      ...this.comments[idNews][indexComment],
+      comment,
+    };
     return 'Комментарий был создан';
   }
 
