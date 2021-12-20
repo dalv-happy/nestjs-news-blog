@@ -2,7 +2,7 @@
   <div class="row">
     {{#each news}}
       <div class="col-lg-6">
-        <div class="card">
+        <div class="card" style="cursor: pointer;" onclick="window.location.href = '/news/detail/{{this.id}}'">
           <img src='http://localhost:3000{{this.cover}}' class="card-img-top" style="height: 200px; object-fit: cover;" alt=''>
           <div class="card-body">
             <h5 class="card-title">{{this.title}}</h5>
