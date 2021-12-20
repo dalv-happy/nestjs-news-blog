@@ -34,8 +34,7 @@ export class NewsService {
       description: 'Ураааа! Наша первая новость',
       author: 'Владислав',
       countView: 12,
-      cover:
-        'https://cdnn21.img.ria.ru/images/148839/96/1488399659_0:0:960:960_600x0_80_0_1_e38b72053fffa5d3d7e82d2fe116f0b3.jpg',
+      cover: '/31e88f97-74e8-4df7-84a0-a9188bb67f28.gif',
     },
   ];
 

@@ -4,6 +4,7 @@ const publicPath = './public';
 let path: string = publicPath;
 
 export class HelperFileLoader {
+  path: string;
   static set path(_path: string) {
     path = publicPath + _path;
   }
