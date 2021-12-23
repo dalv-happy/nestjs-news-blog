@@ -43,7 +43,10 @@ export class NewsService {
   }
 
   findById(id: News['id']): Promise<NewsEntity> {
-    return this.newsRepository.findOne({ id }, { relations: ['user'] });
+    return this.newsRepository.findOne(
+      { id },
+      { relations: ['user', 'comments', 'comments.user'] },
+    );
   }
 
   getAll(): Promise<NewsEntity[]> {
