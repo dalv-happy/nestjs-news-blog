@@ -87,7 +87,7 @@ export class NewsController {
       );
     }
 
-    return news;
+    return { news };
   }
 
   @UseGuards(JwtAuthGuard)

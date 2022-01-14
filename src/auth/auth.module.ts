@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -16,7 +16,7 @@ import { RolesGuard } from './role/roles.guard';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1h' },
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
     PassportModule,
   ],
   providers: [

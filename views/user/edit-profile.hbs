@@ -1,0 +1,35 @@
+<h1>Редактирование профиля</h1>
+<h6>Привет, {{firstName}}!</h6>
+<form method="post" action="/news/api" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="firstName" class="form-label">Имя</label>
+    <input class="form-control" name="firstName" id="firstName" value="{{firstName}}">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">email</label>
+    <input class="form-control" type="email" name="email" id="email" value="{{email}}">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Новый пароль</label>
+    <input class="form-control" name="password" id="password">
+  </div>
+<!--  <input type="submit" value="Создать">-->
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Редактировать</button>
+</form>
+
+
+<script>
+  function sendForm() {
+    axios({
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQyMDkyODI2LCJleHAiOjE2NDIwOTY0MjZ9.PrxnzkC4UNcOJf5zo7FfHb9phNCB7xUDVtjSxqbOXJE"
+      },
+      data: {firstName: $('#firstName')[0].value, email: $('#email')[0].value, password: $('#password')[0].value},
+      url: '/users/api',
+    }).then((data) => {
+      window.location.reload()
+    })
+  }
+</script>
