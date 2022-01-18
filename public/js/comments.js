@@ -2,6 +2,12 @@
 
 const e = React.createElement;
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 class Comments extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +44,15 @@ class Comments extends React.Component {
       const comments = this.state.comments.filter((c) => c.id !== id);
       this.setState({ comments });
     });
+    this.socket.on('editComment', (payload) => {
+      const { id, comment } = payload;
+      const comments = [...this.state.comments];
+      const indexEdit = comments.findIndex((c) => c.id === id);
+      if (indexEdit !== -1) {
+        comments[indexEdit] = comment;
+      }
+      this.setState({ comments });
+    });
   }
 
   getAllComments = async () => {
@@ -65,7 +80,17 @@ class Comments extends React.Component {
     });
   };
 
+  removeComment = (idComment) => {
+    fetch(
+      `http://localhost:3000/comments/api/details/${this.idNews}/${idComment}`,
+      {
+        method: 'DELETE',
+      },
+    );
+  };
+
   render() {
+    const userId = parseInt(getCookie('userId'));
     return (
       <div>
         {this.state.comments.map((comment, index) => {
@@ -74,6 +99,16 @@ class Comments extends React.Component {
               <div className="card-body">
                 <strong>{comment.user.firstName}</strong>
                 <div>{comment.message}</div>
+                <div>
+                  {comment.user.id == userId && (
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => this.removeComment(comment.id)}
+                    >
+                      Удалить
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           );

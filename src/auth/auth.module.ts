@@ -14,7 +14,7 @@ import { RolesGuard } from './role/roles.guard';
   imports: [
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '9999h' },
     }),
     forwardRef(() => UsersModule),
     PassportModule,

@@ -32,12 +32,12 @@ export class NewsService {
     private usersService: UsersService,
   ) {}
 
-  async create(news: CreateNewsDto): Promise<NewsEntity> {
+  async create(news: CreateNewsDto, userId: number): Promise<NewsEntity> {
     const newsEntity = new NewsEntity();
     newsEntity.title = news.title;
     newsEntity.description = news.description;
     newsEntity.cover = news.cover;
-    const _user = await this.usersService.findById(parseInt(news.userId));
+    const _user = await this.usersService.findById(userId);
     newsEntity.user = _user;
     return this.newsRepository.save(newsEntity);
   }

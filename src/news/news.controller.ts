@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Render,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -26,10 +27,12 @@ import { NewsEntity } from './news.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/role/roles.decorator';
 import { Role } from '../auth/role/role.enum';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 const PATH_NEWS = '/news-static/';
 HelperFileLoader.path = PATH_NEWS;
 
+@ApiBearerAuth()
 @Controller('news')
 export class NewsController {
   constructor(
@@ -90,8 +93,14 @@ export class NewsController {
     return { news };
   }
 
+  @ApiOperation({ summary: 'Создание новости' })
+  @ApiResponse({
+    status: 200,
+    description: 'Новость успешно создалась',
+    type: NewsEntity,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin, Role.Moderator)
   @Post('/api')
   @UseInterceptors(
     FileInterceptor('cover', {
@@ -99,28 +108,21 @@ export class NewsController {
         destination: HelperFileLoader.destinationPath,
         filename: HelperFileLoader.customFileName,
       }),
+      fileFilter: HelperFileLoader.fileFilterImages,
     }),
   )
   async create(
     @Body() news: CreateNewsDto,
     @UploadedFile() cover,
+    @Req() req,
   ): Promise<NewsEntity> {
-    const fileExtension = cover.originalname.split('.').reverse()[0];
-    if (!fileExtension || !fileExtension.match(/(jpg|jpeg|png|gif)$/i)) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Неверный формат данных',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const userId = req.user.id;
 
     if (cover?.filename) {
       news.cover = PATH_NEWS + cover.filename;
     }
 
-    const createdNews = await this.newsService.create(news);
+    const createdNews = await this.newsService.create(news, userId);
 
     return createdNews;
   }

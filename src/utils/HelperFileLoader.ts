@@ -18,4 +18,16 @@ export class HelperFileLoader {
   public static destinationPath(req, file, cb) {
     cb(null, path);
   }
+
+  public static fileFilterImages(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      return cb(
+        new Error(
+          'Неверный формат изображения! Мы поддерживаем только: jpg|jpeg|png|gif',
+        ),
+        false,
+      );
+    }
+    cb(null, true);
+  }
 }
