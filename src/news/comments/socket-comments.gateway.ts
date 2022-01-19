@@ -36,14 +36,12 @@ export class SocketCommentsGateway
   @OnEvent(EventsComment.remove)
   handleRemoveCommentEvent(payload) {
     const { commentId, newsId } = payload;
-    console.log(commentId, newsId);
     this.server.to(newsId.toString()).emit('removeComment', { id: commentId });
   }
 
   @OnEvent(EventsComment.edit)
   handleEditCommentEvent(payload) {
     const { commentId, newsId, comment } = payload;
-    console.log(commentId, newsId, comment);
     this.server
       .to(newsId.toString())
       .emit('editComment', { id: commentId, comment });

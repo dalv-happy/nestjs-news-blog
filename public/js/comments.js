@@ -91,6 +91,7 @@ class Comments extends React.Component {
 
   render() {
     const userId = parseInt(getCookie('userId'));
+    const role = getCookie('role');
     return (
       <div>
         {this.state.comments.map((comment, index) => {
@@ -100,14 +101,14 @@ class Comments extends React.Component {
                 <strong>{comment.user.firstName}</strong>
                 <div>{comment.message}</div>
                 <div>
-                  {comment.user.id == userId && (
+                  {comment.user.id === userId || role === 'admin' ? (
                     <button
                       className="btn btn-outline-danger btn-sm"
                       onClick={() => this.removeComment(comment.id)}
                     >
                       Удалить
                     </button>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

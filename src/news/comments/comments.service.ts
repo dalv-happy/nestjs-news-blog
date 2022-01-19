@@ -105,8 +105,7 @@ export class CommentsService {
     }
 
     const _user = await this.userService.findById(userId);
-    console.log(_user);
-    console.log(_comment.user);
+
     if (
       _user.id !== _comment.user.id &&
       !checkPermission(Modules.editComment, _user.roles)

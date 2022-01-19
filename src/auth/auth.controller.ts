@@ -18,10 +18,10 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req, @Res({ passthrough: true }) response: Response) {
-    console.log('login');
-    const { access_token, id } = await this.authService.login(req.user);
+    const { access_token, id, role } = await this.authService.login(req.user);
     response.cookie('jwt', access_token, { httpOnly: true });
     response.cookie('userId', id);
+    response.cookie('role', role);
     return access_token;
   }
 
